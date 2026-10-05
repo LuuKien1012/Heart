@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff7f6">
+  <title>Một điều muốn nói</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #603a49;
+      --muted: #a2808d;
+      --rose: #e85f7b;
+      --rose-deep: #ce4566;
+      --cream: #fff7f6;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-width: 320px; min-height: 100%; margin: 0; }
+    body {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 28px 20px;
+      color: var(--ink);
+      font-family: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(ellipse at 50% 42%, rgba(255,255,255,.95) 0, rgba(255,255,255,.68) 24%, transparent 59%),
+        linear-gradient(145deg, #fff9f4 0%, #fff1f3 54%, #fceef4 100%);
+    }
+    .glow {
+      position: fixed;
+      width: min(76vw, 550px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: rgba(255, 213, 220, .27);
+      filter: blur(55px);
+      pointer-events: none;
+    }
+    main {
+      position: relative;
+      width: min(100%, 540px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transform: translateY(-1vh);
+    }
+    .eyebrow {
+      margin: 0 0 25px;
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 650;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .heart-button {
+      position: relative;
+      width: clamp(190px, 39vw, 270px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      color: white;
+      background: transparent;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      isolation: isolate;
+    }
+    .heart-button::before {
+      content: "";
+      position: absolute;
+      inset: 14%;
+      z-index: -1;
+      border-radius: 50%;
+      background: rgba(233, 95, 123, .19);
+      filter: blur(24px);
+      transition: transform .35s ease, opacity .35s ease;
+    }
+    .heart-button:hover::before { transform: scale(1.17); opacity: .8; }
+    .heart-svg {
+      width: 78%;
+      overflow: visible;
+      filter: drop-shadow(0 16px 17px rgba(183, 68, 98, .2));
+      transform-origin: 50% 58%;
+      transition: transform .25s cubic-bezier(.2,.8,.2,1), filter .25s ease;
+    }
+    .heart-button:hover .heart-svg { transform: scale(1.045); }
+    .heart-button:active .heart-svg { transform: scale(.96); }
+    .heart-button:focus-visible { outline: 3px solid rgba(206,69,102,.7); outline-offset: 8px; }
+    .heart-button.is-open .heart-svg { animation: heart-pop .72s ease both; }
+    .heart-shape { fill: url(#heartGradient); }
+    .heart-highlight { fill: rgba(255,255,255,.23); }
+    .instruction {
+      margin: 17px 0 0;
+      color: #997581;
+      font-size: clamp(.95rem, 2.5vw, 1.05rem);
+      letter-spacing: .015em;
+      transition: opacity .25s ease, transform .25s ease;
+    }
+    .message {
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+      transform: translateY(9px);
+      transition: grid-template-rows .45s ease, opacity .35s ease, transform .45s ease, margin .45s ease;
+      width: min(100%, 400px);
+      margin-top: 0;
+    }
+    .message-inner { overflow: hidden; }
+    .message-card {
+      min-height: 72px;
+      display: grid;
+      place-items: center;
+      padding: 19px 24px;
+      border: 1px solid rgba(220, 155, 171, .27);
+      border-radius: 20px;
+      background: rgba(255,255,255,.67);
+      box-shadow: 0 12px 35px rgba(150, 83, 105, .08);
+      color: #8f6878;
+      font-size: .96rem;
+      line-height: 1.55;
+    }
+    .message-card::before {
+      content: "";
+      width: 30px;
+      height: 1px;
+      margin-bottom: 10px;
+      background: #e8b6c2;
+    }
+    main.revealed .message { grid-template-rows: 1fr; opacity: 1; transform: translateY(0); margin-top: 24px; }
+    main.revealed .instruction { opacity: 0; transform: translateY(-5px); }
+    .sparkle { position: absolute; color: #eaa1b2; pointer-events: none; animation: float 4s ease-in-out infinite; }
+    .sparkle.one { top: 18%; left: 12%; font-size: 18px; }
+    .sparkle.two { top: 31%; right: 8%; font-size: 13px; animation-delay: -1.6s; }
+    .sparkle.three { bottom: 18%; right: 17%; font-size: 17px; animation-delay: -2.4s; }
+    @keyframes heart-pop {
+      0% { transform: scale(1); }
+      28% { transform: scale(1.12) rotate(-2deg); }
+      52% { transform: scale(.98) rotate(1deg); }
+      76% { transform: scale(1.04); }
+      100% { transform: scale(1); }
+    }
+    @keyframes float { 0%,100% { transform: translateY(0); opacity: .55; } 50% { transform: translateY(-9px); opacity: .95; } }
+    @media (max-height: 570px) {
+      main { transform: none; }
+      .eyebrow { margin-bottom: 7px; }
+      .heart-button { width: clamp(145px, 38vh, 210px); }
+      .instruction { margin-top: 3px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+  <main id="card">
+    <span class="sparkle one" aria-hidden="true">✦</span>
+    <span class="sparkle two" aria-hidden="true">✧</span>
+    <span class="sparkle three" aria-hidden="true">✦</span>
+    <p class="eyebrow">Một điều nhỏ xinh</p>
+    <button class="heart-button" id="heart" type="button" aria-label="Mở lời nhắn" aria-expanded="false" aria-controls="message">
+      <svg class="heart-svg" viewBox="0 0 240 220" role="img" aria-hidden="true">
+        <defs>
+          <linearGradient id="heartGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f48698" />
+            <stop offset=".53" stop-color="#ec6682" />
+            <stop offset="1" stop-color="#d94b70" />
+          </linearGradient>
+        </defs>
+        <path class="heart-shape" d="M120 207C109 197 19 137 19 74 19 38 44 16 75 16c20 0 36 11 45 29 9-18 25-29 45-29 31 0 56 22 56 58 0 63-90 123-101 133Z" />
+        <path class="heart-highlight" d="M49 68c2-17 15-29 32-29 7 0 13 2 18 6-17-2-33 11-36 29-1 8 1 16 4 23-12-6-20-17-18-29Z" />
+      </svg>
+    </button>
+    <p class="instruction" id="instruction">Chạm vào trái tim</p>
+    <section class="message" id="message" aria-live="polite" aria-label="Lời nhắn">
+      <div class="message-inner"><div class="message-card">Lời nhắn của bạn sẽ xuất hiện ở đây</div></div>
+    </section>
+  </main>
+  <script>
+    const heart = document.getElementById('heart');
+    const card = document.getElementById('card');
+    heart.addEventListener('click', () => {
+      const isOpen = card.classList.toggle('revealed');
+      heart.classList.remove('is-open');
+      void heart.offsetWidth;
+      heart.classList.add('is-open');
+      heart.setAttribute('aria-expanded', String(isOpen));
+    });
+  </script>
+</body>
+</html>
