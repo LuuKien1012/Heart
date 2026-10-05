@@ -20,13 +20,15 @@
       min-height: 100svh;
       display: grid;
       place-items: center;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       padding: 28px 20px;
       color: var(--ink);
       font-family: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
       background:
         radial-gradient(ellipse at 50% 42%, rgba(255,255,255,.95) 0, rgba(255,255,255,.68) 24%, transparent 59%),
         linear-gradient(145deg, #fff9f4 0%, #fff1f3 54%, #fceef4 100%);
+      background-attachment: fixed;
     }
     .glow {
       position: fixed;
@@ -109,11 +111,10 @@
       width: min(100%, 400px);
       margin-top: 0;
     }
-    .message-inner { overflow: hidden; }
+    .message-inner { overflow: hidden; min-height: 0; }
     .message-card {
-      min-height: 72px;
-      display: grid;
-      place-items: center;
+      display: block;
+      text-align: center;
       padding: 19px 24px;
       border: 1px solid rgba(220, 155, 171, .27);
       border-radius: 20px;
@@ -121,15 +122,18 @@
       box-shadow: 0 12px 35px rgba(150, 83, 105, .08);
       color: #8f6878;
       font-size: .96rem;
-      line-height: 1.55;
+      line-height: 1.6;
     }
     .message-card::before {
       content: "";
+      display: block;
       width: 30px;
       height: 1px;
-      margin-bottom: 10px;
+      margin: 0 auto 12px;
       background: #e8b6c2;
     }
+    .message-card p { margin: 0 0 10px; }
+    .message-card p:last-child { margin-bottom: 0; }
     main.revealed .message { grid-template-rows: 1fr; opacity: 1; transform: translateY(0); margin-top: 24px; }
     main.revealed .instruction { opacity: 0; transform: translateY(-5px); }
     .sparkle { position: absolute; color: #eaa1b2; pointer-events: none; animation: float 4s ease-in-out infinite; }
@@ -177,7 +181,12 @@
     </button>
     <p class="instruction" id="instruction">Chạm vào trái tim</p>
     <section class="message" id="message" aria-live="polite" aria-label="Lời nhắn">
-      <div class="message-inner"><div class="message-card">Thu Hà ah, Mong những ngày thu này sẽ mang đến cho em thật nhiều niềm vui, những buổi chiều thật dịu dàng và một chút ấm áp… giống như cảm giác khi mình bắt đầu có thêm một người để quan tâm. 😊</div></div>
+      <div class="message-inner">
+        <div class="message-card">
+          <p>Thu Hà ah,</p>
+          <p>Mong những ngày thu này sẽ mang đến cho em thật nhiều niềm vui, những buổi chiều thật dịu dàng và một chút ấm áp… giống như cảm giác khi mình bắt đầu có thêm một người để quan tâm. 😊</p>
+        </div>
+      </div>
     </section>
   </main>
   <script>
